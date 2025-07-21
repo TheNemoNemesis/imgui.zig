@@ -1,7 +1,7 @@
 const std = @import("std");
 
 // All platforms and renderers available in imgui
-const Platform = enum {
+pub const Platform = enum {
     android,
     glfw,
     sdl2,
@@ -13,7 +13,7 @@ const Platform = enum {
     // note: not supported osx build since dear_bindings doesnt provide bindings
     // osx,
 };
-const Renderer = enum {
+pub const Renderer = enum {
     dx9,
     dx10,
     dx11,
