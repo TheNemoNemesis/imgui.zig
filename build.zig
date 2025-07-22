@@ -66,7 +66,6 @@ pub fn build(b: *std.Build) !void {
     try addSourceFiles(&sources);
     try addBackendSourceFiles(&sources, platform, renderer);
     imgui_mod.addIncludePath(b.path("dcimgui"));
-    imgui_mod.addIncludePath(b.path("dcimgui/backends"));
     imgui_mod.addCSourceFiles(.{
         .root = b.path("dcimgui"),
         .files = sources.items,
@@ -81,7 +80,7 @@ pub fn build(b: *std.Build) !void {
     imgui_lib.linkLibC();
     // install headers
     imgui_lib.installHeadersDirectory(b.path("dcimgui"), ".", .{.include_extensions = &.{ ".h" }});
-    imgui_lib.installHeadersDirectory(b.path("dcimgui/backends"), ".", .{.include_extensions = &.{ ".h" }});
+    imgui_lib.installHeadersDirectory(b.path("dcimgui/backends"), "./backends", .{.include_extensions = &.{ ".h" }});
     b.installArtifact(imgui_lib);
 }
 
