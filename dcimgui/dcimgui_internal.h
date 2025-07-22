@@ -195,7 +195,6 @@ typedef struct ImGuiShrinkWidthItem_t ImGuiShrinkWidthItem;
 typedef struct ImGuiPtrOrIndex_t ImGuiPtrOrIndex;
 typedef struct ImGuiLayoutItem_t ImGuiLayoutItem;
 typedef struct ImVector_ImGuiLayoutItem_t ImVector_ImGuiLayoutItem;
-typedef struct ImGuiLayout_t ImGuiLayout;
 typedef struct ImGuiInputEventMousePos_t ImGuiInputEventMousePos;
 typedef struct ImGuiInputEventMouseWheel_t ImGuiInputEventMouseWheel;
 typedef struct ImGuiInputEventMouseButton_t ImGuiInputEventMouseButton;

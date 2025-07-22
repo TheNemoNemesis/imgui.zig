@@ -12271,6 +12271,25 @@ void ImGui::BeginHorizontal(int id, const ImVec2& size/* = ImVec2(0, 0)*/, float
     BeginLayout(window->GetID((void*)(intptr_t)id), ImGuiLayoutType_Horizontal, size, align);
 }
 
+ImGuiLayout* ImGui::BeginHorizontalAndReturnPtr(const char* str_id, const ImVec2& size, float align)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    BeginLayout(window->GetID(str_id), ImGuiLayoutType_Horizontal, size, align);
+    return window->DC.CurrentLayout;
+}
+ImGuiLayout* ImGui::BeginHorizontalAndReturnPtr(const void* ptr_id, const ImVec2& size, float align)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    BeginLayout(window->GetID(ptr_id), ImGuiLayoutType_Horizontal, size, align);
+    return window->DC.CurrentLayout;
+}
+ImGuiLayout* ImGui::BeginHorizontalAndReturnPtr(int id, const ImVec2& size, float align)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    BeginLayout(window->GetID((void*)(intptr_t)id), ImGuiLayoutType_Horizontal, size, align);
+    return window->DC.CurrentLayout;
+}
+
 void ImGui::EndHorizontal()
 {
     EndLayout(ImGuiLayoutType_Horizontal);
@@ -12292,6 +12311,25 @@ void ImGui::BeginVertical(int id, const ImVec2& size/* = ImVec2(0, 0)*/, float a
 {
     ImGuiWindow* window = GetCurrentWindow();
     BeginLayout(window->GetID((void*)(intptr_t)id), ImGuiLayoutType_Vertical, size, align);
+}
+
+ImGuiLayout* ImGui::BeginVerticalAndReturnPtr(const char* str_id, const ImVec2& size, float align)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    BeginLayout(window->GetID(str_id), ImGuiLayoutType_Vertical, size, align);
+    return window->DC.CurrentLayout;
+}
+ImGuiLayout* ImGui::BeginVerticalAndReturnPtr(const void* ptr_id, const ImVec2& size, float align)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    BeginLayout(window->GetID(ptr_id), ImGuiLayoutType_Vertical, size, align);
+    return window->DC.CurrentLayout;
+}
+ImGuiLayout* ImGui::BeginVerticalAndReturnPtr(int id, const ImVec2& size, float align)
+{
+    ImGuiWindow* window = GetCurrentWindow();
+    BeginLayout(window->GetID((void*)(intptr_t)id), ImGuiLayoutType_Vertical, size, align);
+    return window->DC.CurrentLayout;
 }
 
 void ImGui::EndVertical()
@@ -12324,6 +12362,17 @@ void ImGui::ResumeLayout()
     IM_ASSERT(!window->DC.LayoutStack.empty());
     IM_UNUSED(window);
     PopLayout(NULL);
+}
+
+ImGuiLayout* ImGui::GetCurrentLayout() {
+    ImGuiWindow* window = GetCurrentWindow();
+    IM_ASSERT(window->DC.CurrentLayout);
+    return window->DC.CurrentLayout;
+}
+void ImGui::SetCurrentLayout(ImGuiLayout* layout) {
+    ImGuiWindow* window = GetCurrentWindow();
+    IM_ASSERT(layout);
+    window->DC.CurrentLayout = layout;
 }
 
 

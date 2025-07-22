@@ -207,6 +207,9 @@ struct ImGuiTextBuffer;             // Helper to hold and append into a text buf
 struct ImGuiTextFilter;             // Helper to parse and apply text filters (e.g. "aaaaa[,bbbbb][,ccccc]")
 struct ImGuiViewport;               // A Platform Window (always only one in 'master' branch), in the future may represent Platform Monitor
 
+// Forward declarations: ImGui layout
+struct ImGuiLayout;
+
 // Enumerations
 // - We don't use strongly typed enums much because they add constraints (can't extend in private code, can't store typed in bit fields, extra casting on iteration)
 // - Tip: Use your programming IDE navigation facilities on the names in the _central column_ below to find the actual flags/enum lists!
@@ -585,14 +588,22 @@ namespace ImGui
     IMGUI_API void          BeginHorizontal(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
     IMGUI_API void          BeginHorizontal(const void* ptr_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
     IMGUI_API void          BeginHorizontal(int id, const ImVec2& size = ImVec2(0, 0), float align = -1);
+    IMGUI_API ImGuiLayout*  BeginHorizontalAndReturnPtr(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
+    IMGUI_API ImGuiLayout*  BeginHorizontalAndReturnPtr(const void* ptr_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
+    IMGUI_API ImGuiLayout*  BeginHorizontalAndReturnPtr(int id, const ImVec2& size = ImVec2(0, 0), float align = -1);
     IMGUI_API void          EndHorizontal();
     IMGUI_API void          BeginVertical(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
     IMGUI_API void          BeginVertical(const void* ptr_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
     IMGUI_API void          BeginVertical(int id, const ImVec2& size = ImVec2(0, 0), float align = -1);
+    IMGUI_API ImGuiLayout*  BeginVerticalAndReturnPtr(const char* str_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
+    IMGUI_API ImGuiLayout*  BeginVerticalAndReturnPtr(const void* ptr_id, const ImVec2& size = ImVec2(0, 0), float align = -1.0f);
+    IMGUI_API ImGuiLayout*  BeginVerticalAndReturnPtr(int id, const ImVec2& size = ImVec2(0, 0), float align = -1);
     IMGUI_API void          EndVertical();
     IMGUI_API void          Spring(float weight = 1.0f, float spacing = -1.0f);
     IMGUI_API void          SuspendLayout();
     IMGUI_API void          ResumeLayout();
+    IMGUI_API ImGuiLayout*  GetCurrentLayout();
+    IMGUI_API void          SetCurrentLayout(ImGuiLayout* layout);
 
     // ID stack/scopes
     // Read the FAQ (docs/FAQ.md or http://dearimgui.com/faq) for more details about how ID are handled in dear imgui.
