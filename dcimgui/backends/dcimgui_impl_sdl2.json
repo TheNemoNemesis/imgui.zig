@@ -13,7 +13,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_sdl2.h",
-                        "line": 51
+                        "line": 47
                     }
                 },
                 {
@@ -23,7 +23,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_sdl2.h",
-                        "line": 51
+                        "line": 47
                     }
                 },
                 {
@@ -33,7 +33,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_sdl2.h",
-                        "line": 51
+                        "line": 47
                     }
                 }
             ],
@@ -46,7 +46,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 51
+                "line": 47
             }
         }
     ],
@@ -101,7 +101,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 29
+                "line": 25
             }
         },
         {
@@ -115,7 +115,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 30
+                "line": 26
             }
         },
         {
@@ -129,7 +129,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 31
+                "line": 27
             }
         },
         {
@@ -206,7 +206,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 35
+                "line": 31
             }
         },
         {
@@ -246,7 +246,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 36
+                "line": 32
             }
         },
         {
@@ -286,7 +286,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 37
+                "line": 33
             }
         },
         {
@@ -326,7 +326,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 38
+                "line": 34
             }
         },
         {
@@ -382,7 +382,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 39
+                "line": 35
             }
         },
         {
@@ -422,7 +422,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 40
+                "line": 36
             }
         },
         {
@@ -445,7 +445,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 41
+                "line": 37
             }
         },
         {
@@ -468,7 +468,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 42
+                "line": 38
             }
         },
         {
@@ -511,7 +511,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 43
+                "line": 39
             }
         },
         {
@@ -556,7 +556,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 46
+                "line": 42
             }
         },
         {
@@ -593,7 +593,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 47
+                "line": 43
             }
         },
         {
@@ -633,7 +633,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 52
+                "line": 48
             }
         },
         {
@@ -704,7 +704,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdl2.h",
-                "line": 52
+                "line": 48
             }
         }
     ]

@@ -38,7 +38,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 27
+                "line": 26
             }
         },
         {
@@ -52,7 +52,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 28
+                "line": 27
             }
         },
         {
@@ -113,7 +113,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 31
+                "line": 30
             }
         },
         {
@@ -136,7 +136,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 32
+                "line": 31
             }
         },
         {
@@ -159,7 +159,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 33
+                "line": 32
             }
         },
         {
@@ -199,7 +199,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 34
+                "line": 33
             }
         },
         {
@@ -239,7 +239,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 35
+                "line": 34
             }
         },
         {
@@ -267,7 +267,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 38
+                "line": 37
             }
         },
         {
@@ -290,7 +290,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 39
+                "line": 38
             }
         },
         {
@@ -335,7 +335,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_allegro5.h",
-                "line": 42
+                "line": 41
             }
         }
     ]

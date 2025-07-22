@@ -38,7 +38,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 23
+                "line": 22
             }
         },
         {
@@ -99,7 +99,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 26
+                "line": 25
             }
         },
         {
@@ -122,7 +122,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 27
+                "line": 26
             }
         },
         {
@@ -145,7 +145,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 28
+                "line": 27
             }
         },
         {
@@ -185,7 +185,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 29
+                "line": 28
             }
         },
         {
@@ -213,7 +213,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 32
+                "line": 31
             }
         },
         {
@@ -236,7 +236,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 33
+                "line": 32
             }
         },
         {
@@ -281,7 +281,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_dx9.h",
-                "line": 36
+                "line": 35
             }
         }
     ]
