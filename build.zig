@@ -36,8 +36,22 @@ const srcFileList = std.ArrayList([]const u8);
 pub fn build(b: *std.Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
-    const platform = b.option(Platform, "platform", "Target platform");
-    const renderer = b.option(Renderer, "renderer", "Target renderer");
+    const platform_option = b.option(Platform, "platform", "Target platform");
+    const renderer_option = b.option(Renderer, "renderer", "Target renderer");
+
+    // Check for platform and renderer to be defined
+    var platform: Platform = undefined;
+    var renderer: Renderer = undefined;
+    if (platform_option) |result| { platform = result; }
+    else {
+        std.log.err("Platform not selected", .{}); 
+        return error.Platform_NOT_Selected;
+    }
+    if (renderer_option) |result| { renderer = result; }
+    else {
+        std.log.err("Renderer not selected", .{});
+        return error.Renderer_NOT_Selected;
+    }
 
     var sources = srcFileList.init(b.allocator);
     defer sources.deinit();
@@ -49,8 +63,8 @@ pub fn build(b: *std.Build) !void {
     });
 
     // Add C/C++ files
-    addSourceFiles(b, sources);
-    addBackendSourceFiles(b, sources, platform, renderer);
+    try addSourceFiles(&sources);
+    try addBackendSourceFiles(&sources, platform, renderer);
     imgui_mod.addIncludePath(b.path("dcimgui"));
     imgui_mod.addIncludePath(b.path("dcimgui/backends"));
     imgui_mod.addCSourceFiles(.{
@@ -63,45 +77,47 @@ pub fn build(b: *std.Build) !void {
         .name = "imgui",
         .root_module = imgui_mod,
     });
+    imgui_lib.linkLibCpp();
+    imgui_lib.linkLibC();
+    // install headers
+    imgui_lib.installHeadersDirectory(b.path("dcimgui"), ".", .{.include_extensions = &.{ ".h" }});
+    imgui_lib.installHeadersDirectory(b.path("dcimgui/backends"), ".", .{.include_extensions = &.{ ".h" }});
     b.installArtifact(imgui_lib);
 }
 
-fn addSourceFiles(b: *std.Build, sources: srcFileList) !void {
-    var dir = try std.fs.cwd().openDir("dcimgui", .{ .iterate = true });
-    defer dir.close();
-    var walker = try dir.walk(b.allocator);
-    defer walker.deinit();
-    while (try walker.next()) |entry| {
-        const ext = std.fs.path.extension(entry.basename);
-        if (std.mem.eql(u8, ext, ".c") or std.mem.eql(u8, ext, ".cpp")) {
-            try sources.append(b.dupe(entry.path));
-        }
-    }
+fn addSourceFiles(sources: *srcFileList) !void {
+    try sources.appendSlice(&.{
+        "dcimgui.cpp",
+        "dcimgui_internal.cpp",
+        "imgui.cpp",
+        "imgui_demo.cpp",
+        "imgui_draw.cpp",
+        "imgui_tables.cpp",
+        "imgui_widgets.cpp",
+    });
 }
-fn addBackendSourceFiles(sources: srcFileList, platform: Platform, renderer: Renderer) !void {
+fn addBackendSourceFiles(sources: *srcFileList, platform: Platform, renderer: Renderer) !void {
     switch (platform) {
-        .android => { try sources.append("dcimgui/backends/dcimgui_impl_android.cpp"); },
-        .glfw => { try sources.append("dcimgui/backends/dcimgui_impl_glfw.cpp"); },
-        .sdl2 => { try sources.append("dcimgui/backends/dcimgui_impl_sdl2.cpp"); },
-        .sdl3 => { try sources.append("dcimgui/backends/dcimgui_impl_sdl3.cpp"); },
-        .win32 => { try sources.append("dcimgui/backends/dcimgui_impl_win32.cpp"); },
-        .glut => { try sources.append("dcimgui/backends/dcimgui_impl_glut.cpp"); },
-        .allegro5 => { try sources.append("dcimgui/backends/dcimgui_impl_allegro5.cpp"); },
-        else => {},
+        .android => { try sources.appendSlice(&.{ "backends/imgui_impl_android.cpp", "backends/dcimgui_impl_android.cpp" }); },
+        .glfw => { try sources.appendSlice(&.{ "backends/imgui_impl_glfw.cpp", "backends/dcimgui_impl_glfw.cpp" }); },
+        .sdl2 => { try sources.appendSlice(&.{ "backends/imgui_impl_sdl2.cpp", "backends/dcimgui_impl_sdl2.cpp" }); },
+        .sdl3 => { try sources.appendSlice(&.{ "backends/imgui_impl_sdl3.cpp", "backends/dcimgui_impl_sdl3.cpp" }); },
+        .win32 => { try sources.appendSlice(&.{ "backends/imgui_impl_win32.cpp", "backends/dcimgui_impl_win32.cpp" }); },
+        .glut => { try sources.appendSlice(&.{ "backends/imgui_impl_glut.cpp", "backends/dcimgui_impl_glut.cpp" }); },
+        .allegro5 => { try sources.appendSlice(&.{ "backends/imgui_impl_allegro5.cpp", "backends/dcimgui_impl_allegro5.cpp" }); },
     }
     switch (renderer) {
-        .dx9 => { try sources.append("dcimgui/backends/dcimgui_impl_dx9.cpp"); },
-        .dx10 => { try sources.append("dcimgui/backends/dcimgui_impl_dx10.cpp"); },
-        .dx11 => { try sources.append("dcimgui/backends/dcimgui_impl_dx11.cpp"); },
-        .dx12 => { try sources.append("dcimgui/backends/dcimgui_impl_dx12.cpp"); },
-        .opengl2 => { try sources.append("dcimgui/backends/dcimgui_impl_opengl2.cpp"); },
-        .opengl3 => { try sources.append("dcimgui/backends/dcimgui_impl_opengl3.cpp"); },
-        .sdlgpu3 => { try sources.append("dcimgui/backends/dcimgui_impl_sdlgpu3.cpp"); },
-        .sdlrenderer2 => { try sources.append("dcimgui/backends/dcimgui_impl_sdlrenderer2.cpp"); },
-        .sdlrenderer3 => { try sources.append("dcimgui/backends/dcimgui_impl_sdlrenderer3.cpp"); },
-        .vulkan => { try sources.append("dcimgui/backends/dcimgui_impl_vulkan.cpp"); },
-        .wgpu => { try sources.append("dcimgui/backends/dcimgui_impl_wgpu.cpp"); },
+        .dx9 => { try sources.appendSlice(&.{ "backends/imgui_impl_dx9.cpp", "backends/dcimgui_impl_dx9.cpp" }); },
+        .dx10 => { try sources.appendSlice(&.{ "backends/imgui_impl_dx10.cpp", "backends/dcimgui_impl_dx10.cpp" }); },
+        .dx11 => { try sources.appendSlice(&.{ "backends/imgui_impl_dx11.cpp", "backends/dcimgui_impl_dx11.cpp" }); },
+        .dx12 => { try sources.appendSlice(&.{ "backends/imgui_impl_dx12.cpp", "backends/dcimgui_impl_dx12.cpp" }); },
+        .opengl2 => { try sources.appendSlice(&.{ "backends/imgui_impl_opengl2.cpp", "backends/dcimgui_impl_opengl2.cpp" }); },
+        .opengl3 => { try sources.appendSlice(&.{ "backends/imgui_impl_opengl3.cpp", "backends/dcimgui_impl_opengl3.cpp" }); },
+        .sdlgpu3 => { try sources.appendSlice(&.{ "backends/imgui_impl_sdlgpu3.cpp", "backends/dcimgui_impl_sdlgpu3.cpp" }); },
+        .sdlrenderer2 => { try sources.appendSlice(&.{ "backends/imgui_impl_sdlrenderer2.cpp", "backends/dcimgui_impl_sdlrenderer2.cpp" }); },
+        .sdlrenderer3 => { try sources.appendSlice(&.{ "backends/imgui_impl_sdlrenderer3.cpp", "backends/dcimgui_impl_sdlrenderer3.cpp" }); },
+        .vulkan => { try sources.appendSlice(&.{ "backends/imgui_impl_vulkan.cpp", "backends/dcimgui_impl_vulkan.cpp" }); },
+        .wgpu => { try sources.appendSlice(&.{ "backends/imgui_impl_wgpu.cpp", "backends/dcimgui_impl_wgpu.cpp" }); },
         .allegro5 => {}, // note: already added in platform, no need to do it here
-        else => {},
     }
 }
