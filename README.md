@@ -25,7 +25,7 @@ pub fn build(b: *std.Build) {
 +        .target = target,
 +        .optimize = optimize,
 +        .platform = imgui.Platform.sdl3,
-+        .renderer = imgui.Platform.sdlrender3,
++        .renderer = imgui.Platform.sdlrenderer3,
 +    });
 
     // "exe" represents your executable/library
