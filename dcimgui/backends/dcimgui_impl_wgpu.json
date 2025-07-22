@@ -63,7 +63,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_wgpu.h",
-                        "line": 35
+                        "line": 37
                     }
                 },
                 {
@@ -81,7 +81,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_wgpu.h",
-                        "line": 36
+                        "line": 38
                     }
                 },
                 {
@@ -99,7 +99,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_wgpu.h",
-                        "line": 37
+                        "line": 39
                     }
                 },
                 {
@@ -117,7 +117,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_wgpu.h",
-                        "line": 38
+                        "line": 40
                     }
                 },
                 {
@@ -135,14 +135,14 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_wgpu.h",
-                        "line": 39
+                        "line": 41
                     }
                 }
             ],
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 33
+                "line": 35
             }
         },
         {
@@ -167,7 +167,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_wgpu.h",
-                        "line": 67
+                        "line": 69
                     }
                 },
                 {
@@ -184,7 +184,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_wgpu.h",
-                        "line": 68
+                        "line": 70
                     }
                 }
             ],
@@ -198,7 +198,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 65
+                "line": 67
             }
         }
     ],
@@ -245,7 +245,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 50
+                "line": 52
             }
         },
         {
@@ -268,7 +268,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 51
+                "line": 53
             }
         },
         {
@@ -291,7 +291,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 52
+                "line": 54
             }
         },
         {
@@ -344,7 +344,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 53
+                "line": 55
             }
         },
         {
@@ -372,7 +372,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 56
+                "line": 58
             }
         },
         {
@@ -395,7 +395,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 57
+                "line": 59
             }
         },
         {
@@ -440,7 +440,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_wgpu.h",
-                "line": 60
+                "line": 62
             }
         }
     ]
