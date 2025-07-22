@@ -246,9 +246,6 @@ typedef struct ImGuiTextBuffer_t ImGuiTextBuffer;                              /
 typedef struct ImGuiTextFilter_t ImGuiTextFilter;                              // Helper to parse and apply text filters (e.g. "aaaaa[,bbbbb][,ccccc]")
 typedef struct ImGuiViewport_t ImGuiViewport;                                  // A Platform Window (always only one in 'master' branch), in the future may represent Platform Monitor
 
-// Forward declarations: ImGui layout
-typedef struct ImGuiLayout_t ImGuiLayout;
-
 // Enumerations
 // - We don't use strongly typed enums much because they add constraints (can't extend in private code, can't store typed in bit fields, extra casting on iteration)
 // - Tip: Use your programming IDE navigation facilities on the names in the _central column_ below to find the actual flags/enum lists!
@@ -609,38 +606,24 @@ CIMGUI_API float ImGui_GetTextLineHeightWithSpacing(void);       // ~ FontSize +
 CIMGUI_API float ImGui_GetFrameHeight(void);                     // ~ FontSize + style.FramePadding.y * 2
 CIMGUI_API float ImGui_GetFrameHeightWithSpacing(void);          // ~ FontSize + style.FramePadding.y * 2 + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of framed widgets)
 
-CIMGUI_API void         ImGui_BeginHorizontal(const char* str_id);                                                                 // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API void         ImGui_BeginHorizontalEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API void         ImGui_BeginHorizontalPtr(const void* ptr_id);                                                              // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API void         ImGui_BeginHorizontalPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API void         ImGui_BeginHorizontalInt(int id);                                                                          // Implied size = ImVec2(0, 0), align = -1
-CIMGUI_API void         ImGui_BeginHorizontalIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
-CIMGUI_API ImGuiLayout* ImGui_BeginHorizontalAndReturnPtr(const char* str_id);                                                     // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API ImGuiLayout* ImGui_BeginHorizontalAndReturnPtrEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API ImGuiLayout* ImGui_BeginHorizontalAndReturnPtrPtr(const void* ptr_id);                                                  // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API ImGuiLayout* ImGui_BeginHorizontalAndReturnPtrPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API ImGuiLayout* ImGui_BeginHorizontalAndReturnPtrInt(int id);                                                              // Implied size = ImVec2(0, 0), align = -1
-CIMGUI_API ImGuiLayout* ImGui_BeginHorizontalAndReturnPtrIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
-CIMGUI_API void         ImGui_EndHorizontal(void);
-CIMGUI_API void         ImGui_BeginVertical(const char* str_id);                                                                   // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API void         ImGui_BeginVerticalEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API void         ImGui_BeginVerticalPtr(const void* ptr_id);                                                                // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API void         ImGui_BeginVerticalPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API void         ImGui_BeginVerticalInt(int id);                                                                            // Implied size = ImVec2(0, 0), align = -1
-CIMGUI_API void         ImGui_BeginVerticalIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
-CIMGUI_API ImGuiLayout* ImGui_BeginVerticalAndReturnPtr(const char* str_id);                                                       // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API ImGuiLayout* ImGui_BeginVerticalAndReturnPtrEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API ImGuiLayout* ImGui_BeginVerticalAndReturnPtrPtr(const void* ptr_id);                                                    // Implied size = ImVec2(0, 0), align = -1.0f
-CIMGUI_API ImGuiLayout* ImGui_BeginVerticalAndReturnPtrPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
-CIMGUI_API ImGuiLayout* ImGui_BeginVerticalAndReturnPtrInt(int id);                                                                // Implied size = ImVec2(0, 0), align = -1
-CIMGUI_API ImGuiLayout* ImGui_BeginVerticalAndReturnPtrIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
-CIMGUI_API void         ImGui_EndVertical(void);
-CIMGUI_API void         ImGui_Spring(void);                                                                                        // Implied weight = 1.0f, spacing = -1.0f
-CIMGUI_API void         ImGui_SpringEx(float weight /* = 1.0f */, float spacing /* = -1.0f */);
-CIMGUI_API void         ImGui_SuspendLayout(void);
-CIMGUI_API void         ImGui_ResumeLayout(void);
-CIMGUI_API ImGuiLayout* ImGui_GetCurrentLayout(void);
-CIMGUI_API void         ImGui_SetCurrentLayout(ImGuiLayout* layout);
+CIMGUI_API void ImGui_BeginHorizontal(const char* str_id);                                                     // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void ImGui_BeginHorizontalEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void ImGui_BeginHorizontalPtr(const void* ptr_id);                                                  // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void ImGui_BeginHorizontalPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void ImGui_BeginHorizontalInt(int id);                                                              // Implied size = ImVec2(0, 0), align = -1
+CIMGUI_API void ImGui_BeginHorizontalIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
+CIMGUI_API void ImGui_EndHorizontal(void);
+CIMGUI_API void ImGui_BeginVertical(const char* str_id);                                                       // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void ImGui_BeginVerticalEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void ImGui_BeginVerticalPtr(const void* ptr_id);                                                    // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void ImGui_BeginVerticalPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void ImGui_BeginVerticalInt(int id);                                                                // Implied size = ImVec2(0, 0), align = -1
+CIMGUI_API void ImGui_BeginVerticalIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
+CIMGUI_API void ImGui_EndVertical(void);
+CIMGUI_API void ImGui_Spring(void);                                                                            // Implied weight = 1.0f, spacing = -1.0f
+CIMGUI_API void ImGui_SpringEx(float weight /* = 1.0f */, float spacing /* = -1.0f */);
+CIMGUI_API void ImGui_SuspendLayout(void);
+CIMGUI_API void ImGui_ResumeLayout(void);
 
 // ID stack/scopes
 // Read the FAQ (docs/FAQ.md or http://dearimgui.com/faq) for more details about how ID are handled in dear imgui.

@@ -921,164 +921,94 @@ CIMGUI_API float cimgui::ImGui_GetFrameHeightWithSpacing(void)
     return ::ImGui::GetFrameHeightWithSpacing();
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginHorizontal(const char* str_id)
+CIMGUI_API void cimgui::ImGui_BeginHorizontal(const char* str_id)
 {
     ::ImGui::BeginHorizontal(str_id);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginHorizontalEx(const char* str_id, cimgui::ImVec2 size, float align)
+CIMGUI_API void cimgui::ImGui_BeginHorizontalEx(const char* str_id, cimgui::ImVec2 size, float align)
 {
     ::ImGui::BeginHorizontal(str_id, ConvertToCPP_ImVec2(size), align);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginHorizontalPtr(const void* ptr_id)
+CIMGUI_API void cimgui::ImGui_BeginHorizontalPtr(const void* ptr_id)
 {
     ::ImGui::BeginHorizontal(ptr_id);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginHorizontalPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
+CIMGUI_API void cimgui::ImGui_BeginHorizontalPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
 {
     ::ImGui::BeginHorizontal(ptr_id, ConvertToCPP_ImVec2(size), align);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginHorizontalInt(int id)
+CIMGUI_API void cimgui::ImGui_BeginHorizontalInt(int id)
 {
     ::ImGui::BeginHorizontal(id);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginHorizontalIntEx(int id, cimgui::ImVec2 size, float align)
+CIMGUI_API void cimgui::ImGui_BeginHorizontalIntEx(int id, cimgui::ImVec2 size, float align)
 {
     ::ImGui::BeginHorizontal(id, ConvertToCPP_ImVec2(size), align);
 }
 
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginHorizontalAndReturnPtr(const char* str_id)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginHorizontalAndReturnPtr(str_id));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginHorizontalAndReturnPtrEx(const char* str_id, cimgui::ImVec2 size, float align)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginHorizontalAndReturnPtr(str_id, ConvertToCPP_ImVec2(size), align));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginHorizontalAndReturnPtrPtr(const void* ptr_id)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginHorizontalAndReturnPtr(ptr_id));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginHorizontalAndReturnPtrPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginHorizontalAndReturnPtr(ptr_id, ConvertToCPP_ImVec2(size), align));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginHorizontalAndReturnPtrInt(int id)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginHorizontalAndReturnPtr(id));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginHorizontalAndReturnPtrIntEx(int id, cimgui::ImVec2 size, float align)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginHorizontalAndReturnPtr(id, ConvertToCPP_ImVec2(size), align));
-}
-
-CIMGUI_API void         cimgui::ImGui_EndHorizontal(void)
+CIMGUI_API void cimgui::ImGui_EndHorizontal(void)
 {
     ::ImGui::EndHorizontal();
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginVertical(const char* str_id)
+CIMGUI_API void cimgui::ImGui_BeginVertical(const char* str_id)
 {
     ::ImGui::BeginVertical(str_id);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginVerticalEx(const char* str_id, cimgui::ImVec2 size, float align)
+CIMGUI_API void cimgui::ImGui_BeginVerticalEx(const char* str_id, cimgui::ImVec2 size, float align)
 {
     ::ImGui::BeginVertical(str_id, ConvertToCPP_ImVec2(size), align);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginVerticalPtr(const void* ptr_id)
+CIMGUI_API void cimgui::ImGui_BeginVerticalPtr(const void* ptr_id)
 {
     ::ImGui::BeginVertical(ptr_id);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginVerticalPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
+CIMGUI_API void cimgui::ImGui_BeginVerticalPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
 {
     ::ImGui::BeginVertical(ptr_id, ConvertToCPP_ImVec2(size), align);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginVerticalInt(int id)
+CIMGUI_API void cimgui::ImGui_BeginVerticalInt(int id)
 {
     ::ImGui::BeginVertical(id);
 }
 
-CIMGUI_API void         cimgui::ImGui_BeginVerticalIntEx(int id, cimgui::ImVec2 size, float align)
+CIMGUI_API void cimgui::ImGui_BeginVerticalIntEx(int id, cimgui::ImVec2 size, float align)
 {
     ::ImGui::BeginVertical(id, ConvertToCPP_ImVec2(size), align);
 }
 
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginVerticalAndReturnPtr(const char* str_id)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginVerticalAndReturnPtr(str_id));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginVerticalAndReturnPtrEx(const char* str_id, cimgui::ImVec2 size, float align)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginVerticalAndReturnPtr(str_id, ConvertToCPP_ImVec2(size), align));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginVerticalAndReturnPtrPtr(const void* ptr_id)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginVerticalAndReturnPtr(ptr_id));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginVerticalAndReturnPtrPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginVerticalAndReturnPtr(ptr_id, ConvertToCPP_ImVec2(size), align));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginVerticalAndReturnPtrInt(int id)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginVerticalAndReturnPtr(id));
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_BeginVerticalAndReturnPtrIntEx(int id, cimgui::ImVec2 size, float align)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::BeginVerticalAndReturnPtr(id, ConvertToCPP_ImVec2(size), align));
-}
-
-CIMGUI_API void         cimgui::ImGui_EndVertical(void)
+CIMGUI_API void cimgui::ImGui_EndVertical(void)
 {
     ::ImGui::EndVertical();
 }
 
-CIMGUI_API void         cimgui::ImGui_Spring(void)
+CIMGUI_API void cimgui::ImGui_Spring(void)
 {
     ::ImGui::Spring();
 }
 
-CIMGUI_API void         cimgui::ImGui_SpringEx(float weight, float spacing)
+CIMGUI_API void cimgui::ImGui_SpringEx(float weight, float spacing)
 {
     ::ImGui::Spring(weight, spacing);
 }
 
-CIMGUI_API void         cimgui::ImGui_SuspendLayout(void)
+CIMGUI_API void cimgui::ImGui_SuspendLayout(void)
 {
     ::ImGui::SuspendLayout();
 }
 
-CIMGUI_API void         cimgui::ImGui_ResumeLayout(void)
+CIMGUI_API void cimgui::ImGui_ResumeLayout(void)
 {
     ::ImGui::ResumeLayout();
-}
-
-CIMGUI_API cimgui::ImGuiLayout* cimgui::ImGui_GetCurrentLayout(void)
-{
-    return reinterpret_cast<::cimgui::ImGuiLayout*>(::ImGui::GetCurrentLayout());
-}
-
-CIMGUI_API void         cimgui::ImGui_SetCurrentLayout(cimgui::ImGuiLayout* layout)
-{
-    ::ImGui::SetCurrentLayout(reinterpret_cast<::ImGuiLayout*>(layout));
 }
 
 CIMGUI_API void    cimgui::ImGui_PushID(const char* str_id)
