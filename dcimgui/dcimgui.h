@@ -34,10 +34,11 @@
 // (Integer encoded as XYYZZ for use in #if preprocessor conditionals, e.g. '#if IMGUI_VERSION_NUM >= 12345')
 #define IMGUI_VERSION       "1.92.1"
 #define IMGUI_VERSION_NUM   19210
-#define IMGUI_HAS_TABLE              // Added BeginTable() - from IMGUI_VERSION_NUM >= 18000
-#define IMGUI_HAS_TEXTURES           // Added ImGuiBackendFlags_RendererHasTextures - from IMGUI_VERSION_NUM >= 19198
-#define IMGUI_HAS_VIEWPORT           // In 'docking' WIP branch.
-#define IMGUI_HAS_DOCK               // In 'docking' WIP branch.
+#define IMGUI_HAS_TABLE                // Added BeginTable() - from IMGUI_VERSION_NUM >= 18000
+#define IMGUI_HAS_TEXTURES             // Added ImGuiBackendFlags_RendererHasTextures - from IMGUI_VERSION_NUM >= 19198
+#define IMGUI_HAS_VIEWPORT             // In 'docking' WIP branch.
+#define IMGUI_HAS_DOCK                 // In 'docking' WIP branch.
+#define IMGUI_HAS_STACK_LAYOUT      1  // Stack-Layout PR #846
 
 // Extra defines set by Dear Bindings for internal purposes
 #define IMGUI_DEAR_BINDINGS_HAS_GETWINDOWFRAMEBUFFERSCALE
@@ -599,23 +600,41 @@ CIMGUI_API void   ImGui_SetCursorPosY(float local_y);    // [window-local] "
 CIMGUI_API ImVec2 ImGui_GetCursorStartPos(void);         // [window-local] initial cursor position, in window-local coordinates. Call GetCursorScreenPos() after Begin() to get the absolute coordinates version.
 
 // Other layout functions
-CIMGUI_API void  ImGui_Separator(void);                          // separator, generally horizontal. inside a menu bar or in horizontal layout mode, this becomes a vertical separator.
-CIMGUI_API void  ImGui_SameLine(void);                           // Implied offset_from_start_x = 0.0f, spacing = -1.0f
+CIMGUI_API void  ImGui_Separator(void);                                                   // separator, generally horizontal. inside a menu bar or in horizontal layout mode, this becomes a vertical separator.
+CIMGUI_API void  ImGui_SameLine(void);                                                    // Implied offset_from_start_x = 0.0f, spacing = -1.0f
 CIMGUI_API void  ImGui_SameLineEx(float offset_from_start_x /* = 0.0f */, float spacing /* = -1.0f */); // call between widgets or groups to layout them horizontally. X position given in window coordinates.
-CIMGUI_API void  ImGui_NewLine(void);                            // undo a SameLine() or force a new line when in a horizontal-layout context.
-CIMGUI_API void  ImGui_Spacing(void);                            // add vertical spacing.
-CIMGUI_API void  ImGui_Dummy(ImVec2 size);                       // add a dummy item of given size. unlike InvisibleButton(), Dummy() won't take the mouse click or be navigable into.
-CIMGUI_API void  ImGui_Indent(void);                             // Implied indent_w = 0.0f
-CIMGUI_API void  ImGui_IndentEx(float indent_w /* = 0.0f */);    // move content position toward the right, by indent_w, or style.IndentSpacing if indent_w <= 0
-CIMGUI_API void  ImGui_Unindent(void);                           // Implied indent_w = 0.0f
-CIMGUI_API void  ImGui_UnindentEx(float indent_w /* = 0.0f */);  // move content position back to the left, by indent_w, or style.IndentSpacing if indent_w <= 0
-CIMGUI_API void  ImGui_BeginGroup(void);                         // lock horizontal starting position
-CIMGUI_API void  ImGui_EndGroup(void);                           // unlock horizontal starting position + capture the whole group bounding box into one "item" (so you can use IsItemHovered() or layout primitives such as SameLine() on whole group, etc.)
-CIMGUI_API void  ImGui_AlignTextToFramePadding(void);            // vertically align upcoming text baseline to FramePadding.y so that it will align properly to regularly framed items (call if you have text on a line before a framed item)
-CIMGUI_API float ImGui_GetTextLineHeight(void);                  // ~ FontSize
-CIMGUI_API float ImGui_GetTextLineHeightWithSpacing(void);       // ~ FontSize + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of text)
-CIMGUI_API float ImGui_GetFrameHeight(void);                     // ~ FontSize + style.FramePadding.y * 2
-CIMGUI_API float ImGui_GetFrameHeightWithSpacing(void);          // ~ FontSize + style.FramePadding.y * 2 + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of framed widgets)
+CIMGUI_API void  ImGui_NewLine(void);                                                     // undo a SameLine() or force a new line when in a horizontal-layout context.
+CIMGUI_API void  ImGui_Spacing(void);                                                     // add vertical spacing.
+CIMGUI_API void  ImGui_Dummy(ImVec2 size);                                                // add a dummy item of given size. unlike InvisibleButton(), Dummy() won't take the mouse click or be navigable into.
+CIMGUI_API void  ImGui_Indent(void);                                                      // Implied indent_w = 0.0f
+CIMGUI_API void  ImGui_IndentEx(float indent_w /* = 0.0f */);                             // move content position toward the right, by indent_w, or style.IndentSpacing if indent_w <= 0
+CIMGUI_API void  ImGui_Unindent(void);                                                    // Implied indent_w = 0.0f
+CIMGUI_API void  ImGui_UnindentEx(float indent_w /* = 0.0f */);                           // move content position back to the left, by indent_w, or style.IndentSpacing if indent_w <= 0
+CIMGUI_API void  ImGui_BeginGroup(void);                                                  // lock horizontal starting position
+CIMGUI_API void  ImGui_EndGroup(void);                                                    // unlock horizontal starting position + capture the whole group bounding box into one "item" (so you can use IsItemHovered() or layout primitives such as SameLine() on whole group, etc.)
+CIMGUI_API void  ImGui_AlignTextToFramePadding(void);                                     // vertically align upcoming text baseline to FramePadding.y so that it will align properly to regularly framed items (call if you have text on a line before a framed item)
+CIMGUI_API float ImGui_GetTextLineHeight(void);                                           // ~ FontSize
+CIMGUI_API float ImGui_GetTextLineHeightWithSpacing(void);                                // ~ FontSize + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of text)
+CIMGUI_API float ImGui_GetFrameHeight(void);                                              // ~ FontSize + style.FramePadding.y * 2
+CIMGUI_API float ImGui_GetFrameHeightWithSpacing(void);                                   // ~ FontSize + style.FramePadding.y * 2 + style.ItemSpacing.y (distance in pixels between 2 consecutive lines of framed widgets)
+CIMGUI_API void  ImGui_BeginHorizontal(const char* str_id);                               // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void  ImGui_BeginHorizontalEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void  ImGui_BeginHorizontalPtr(const void* ptr_id);                            // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void  ImGui_BeginHorizontalPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void  ImGui_BeginHorizontalInt(int id);                                        // Implied size = ImVec2(0, 0), align = -1
+CIMGUI_API void  ImGui_BeginHorizontalIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
+CIMGUI_API void  ImGui_EndHorizontal(void);
+CIMGUI_API void  ImGui_BeginVertical(const char* str_id);                                 // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void  ImGui_BeginVerticalEx(const char* str_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void  ImGui_BeginVerticalPtr(const void* ptr_id);                              // Implied size = ImVec2(0, 0), align = -1.0f
+CIMGUI_API void  ImGui_BeginVerticalPtrEx(const void* ptr_id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1.0f */);
+CIMGUI_API void  ImGui_BeginVerticalInt(int id);                                          // Implied size = ImVec2(0, 0), align = -1
+CIMGUI_API void  ImGui_BeginVerticalIntEx(int id, ImVec2 size /* = ImVec2(0, 0) */, float align /* = -1 */);
+CIMGUI_API void  ImGui_EndVertical(void);
+CIMGUI_API void  ImGui_Spring(void);                                                      // Implied weight = 1.0f, spacing = -1.0f
+CIMGUI_API void  ImGui_SpringEx(float weight /* = 1.0f */, float spacing /* = -1.0f */);
+CIMGUI_API void  ImGui_SuspendLayout(void);
+CIMGUI_API void  ImGui_ResumeLayout(void);
 
 // ID stack/scopes
 // Read the FAQ (docs/FAQ.md or http://dearimgui.com/faq) for more details about how ID are handled in dear imgui.
@@ -2048,6 +2067,7 @@ typedef enum
     ImGuiStyleVar_ScrollbarRounding,            // float     ScrollbarRounding
     ImGuiStyleVar_GrabMinSize,                  // float     GrabMinSize
     ImGuiStyleVar_GrabRounding,                 // float     GrabRounding
+    ImGuiStyleVar_LayoutAlign,                  // float     LayoutAlign
     ImGuiStyleVar_ImageBorderSize,              // float     ImageBorderSize
     ImGuiStyleVar_TabRounding,                  // float     TabRounding
     ImGuiStyleVar_TabBorderSize,                // float     TabBorderSize
@@ -2482,6 +2502,7 @@ struct ImGuiStyle_t
     float              ScrollbarRounding;                 // Radius of grab corners for scrollbar.
     float              GrabMinSize;                       // Minimum width/height of a grab box for slider/scrollbar.
     float              GrabRounding;                      // Radius of grabs corners rounding. Set to 0.0f to have rectangular slider grabs.
+    float              LayoutAlign;                       // Element alignment inside horizontal and vertical layouts (0.0f - left/top, 1.0f - right/bottom, 0.5f - center).
     float              LogSliderDeadzone;                 // The size in pixels of the dead-zone around zero on logarithmic sliders that cross zero.
     float              ImageBorderSize;                   // Thickness of border around Image() calls.
     float              TabRounding;                       // Radius of upper corners of a tab. Set to 0.0f to have rectangular tabs.

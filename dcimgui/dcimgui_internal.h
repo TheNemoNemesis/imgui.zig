@@ -5,6 +5,7 @@
 // dear imgui, v1.92.1
 struct ImVector_ImFontBakedPtr_t { int Size; int Capacity; ImFontBaked** Data; };  // Instantiation of ImVector<ImFontBaked*>
 struct ImVector_ImFontAtlasPtr_t { int Size; int Capacity; ImFontAtlas** Data; };  // Instantiation of ImVector<ImFontAtlas*>
+struct ImVector_ImGuiLayoutPtr_t { int Size; int Capacity; ImGuiLayout** Data; };  // Instantiation of ImVector<ImGuiLayout*>
 // (internal structures/api)
 
 // You may use this file to debug, understand or extend Dear ImGui features but we don't provide any guarantee of forward compatibility.
@@ -137,6 +138,7 @@ extern "C"
 // Auto-generated forward declarations for C header
 typedef struct ImVector_ImFontBakedPtr_t ImVector_ImFontBakedPtr;
 typedef struct ImVector_ImFontAtlasPtr_t ImVector_ImFontAtlasPtr;
+typedef struct ImVector_ImGuiLayoutPtr_t ImVector_ImGuiLayoutPtr;
 typedef struct ImVec1_t ImVec1;
 typedef struct ImVec2i_t ImVec2i;
 typedef struct ImVec2ih_t ImVec2ih;
@@ -194,6 +196,9 @@ typedef struct ImGuiInputTextDeactivatedState_t ImGuiInputTextDeactivatedState;
 typedef struct ImGuiWindowStackData_t ImGuiWindowStackData;
 typedef struct ImGuiShrinkWidthItem_t ImGuiShrinkWidthItem;
 typedef struct ImGuiPtrOrIndex_t ImGuiPtrOrIndex;
+typedef struct ImGuiLayoutItem_t ImGuiLayoutItem;
+typedef struct ImVector_ImGuiLayoutItem_t ImVector_ImGuiLayoutItem;
+typedef struct ImGuiLayout_t ImGuiLayout;
 typedef struct ImGuiInputEventMousePos_t ImGuiInputEventMousePos;
 typedef struct ImGuiInputEventMouseWheel_t ImGuiInputEventMouseWheel;
 typedef struct ImGuiInputEventMouseButton_t ImGuiInputEventMouseButton;
@@ -283,9 +288,10 @@ typedef struct ImGuiWindowSettings_t ImGuiWindowSettings;                    // 
 
 // Enumerations
 // Use your programming IDE "Go to definition" facility on the names of the center columns to find the actual flags/enum lists.
-typedef int ImGuiLocKey;         // -> enum ImGuiLocKey              // Enum: a localization entry for translation.
-typedef int ImGuiDataAuthority;  // -> enum ImGuiDataAuthority_      // Enum: for storing the source authority (dock node vs window) of a field
-typedef int ImGuiLayoutType;     // -> enum ImGuiLayoutType_         // Enum: Horizontal or vertical
+typedef int ImGuiLocKey;          // -> enum ImGuiLocKey              // Enum: a localization entry for translation.
+typedef int ImGuiDataAuthority;   // -> enum ImGuiDataAuthority_      // Enum: for storing the source authority (dock node vs window) of a field
+typedef int ImGuiLayoutType;      // -> enum ImGuiLayoutType_         // Enum: Horizontal or vertical
+typedef int ImGuiLayoutItemType;  // -> enum ImGuiLayoutItemType_     // Enum: Item or Spring
 
 // Flags
 typedef int ImGuiActivateFlags;         // -> enum ImGuiActivateFlags_      // Flags: for navigation/focus function (will be for ActivateItem() later)
@@ -1113,6 +1119,12 @@ typedef enum
     ImGuiLayoutType_Vertical   = 1,
 } ImGuiLayoutType_;
 
+typedef enum
+{
+    ImGuiLayoutItemType_Item,
+    ImGuiLayoutItemType_Spring,
+} ImGuiLayoutItemType_;
+
 // Flags for LogBegin() text capturing function
 typedef enum
 {
@@ -1400,6 +1412,48 @@ struct ImGuiPtrOrIndex_t
 {
     void* Ptr;    // Either field can be set, not both. e.g. Dock node tab bars are loose while BeginTabBar() ones are in a pool.
     int   Index;  // Usually index in a main pool.
+};
+
+// sizeof() == 48
+struct ImGuiLayoutItem_t
+{
+    ImGuiLayoutItemType Type;           // Type of an item
+    ImRect              MeasuredBounds;
+
+    float               SpringWeight;   // Weight of a spring
+    float               SpringSpacing;  // Spring spacing
+    float               SpringSize;     // Calculated spring size
+
+    float               CurrentAlign;
+    float               CurrentAlignOffset;
+
+    unsigned int        VertexIndexBegin;
+    unsigned int        VertexIndexEnd;
+};
+struct ImVector_ImGuiLayoutItem_t { int Size; int Capacity; ImGuiLayoutItem* Data; };  // Instantiation of ImVector<ImGuiLayoutItem>
+
+struct ImGuiLayout_t
+{
+    ImGuiID                  Id;
+    ImGuiLayoutType          Type;
+    bool                     Live;
+    ImVec2                   Size;               // Size passed to BeginLayout
+    ImVec2                   CurrentSize;        // Bounds of layout known at the beginning the frame.
+    ImVec2                   MinimumSize;        // Minimum possible size when springs are collapsed.
+    ImVec2                   MeasuredSize;       // Measured size with springs expanded.
+
+    ImVector_ImGuiLayoutItem Items;
+    int                      CurrentItemIndex;
+    int                      ParentItemIndex;
+    ImGuiLayout*             Parent;
+    ImGuiLayout*             FirstChild;
+    ImGuiLayout*             NextSibling;
+    float                    Align;              // Current item alignment.
+    float                    Indent;             // Indent used to align items in vertical layout.
+    ImVec2                   StartPos;           // Initial cursor position when BeginLayout is called.
+    ImVec2                   StartCursorMaxPos;  // Maximum cursor position when BeginLayout is called.
+
+    ImDrawListSplitter       Splitter;
 };
 
 // Data used by IsItemDeactivated()/IsItemDeactivatedAfterEdit() functions
@@ -2739,6 +2793,10 @@ struct ImGuiWindowTempData_t
     int                     CurrentTableIdx;                // Current table index (into g.Tables)
     ImGuiLayoutType         LayoutType;
     ImGuiLayoutType         ParentLayoutType;               // Layout type of parent window at the time of Begin()
+    ImGuiLayout*            CurrentLayout;
+    ImGuiLayoutItem*        CurrentLayoutItem;
+    ImVector_ImGuiLayoutPtr LayoutStack;
+    ImGuiStorage            Layouts;
     ImU32                   ModalDimBgColor;
 
     // Status flags

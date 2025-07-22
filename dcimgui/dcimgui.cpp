@@ -936,6 +936,96 @@ CIMGUI_API float cimgui::ImGui_GetFrameHeightWithSpacing(void)
     return ::ImGui::GetFrameHeightWithSpacing();
 }
 
+CIMGUI_API void  cimgui::ImGui_BeginHorizontal(const char* str_id)
+{
+    ::ImGui::BeginHorizontal(str_id);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginHorizontalEx(const char* str_id, cimgui::ImVec2 size, float align)
+{
+    ::ImGui::BeginHorizontal(str_id, ConvertToCPP_ImVec2(size), align);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginHorizontalPtr(const void* ptr_id)
+{
+    ::ImGui::BeginHorizontal(ptr_id);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginHorizontalPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
+{
+    ::ImGui::BeginHorizontal(ptr_id, ConvertToCPP_ImVec2(size), align);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginHorizontalInt(int id)
+{
+    ::ImGui::BeginHorizontal(id);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginHorizontalIntEx(int id, cimgui::ImVec2 size, float align)
+{
+    ::ImGui::BeginHorizontal(id, ConvertToCPP_ImVec2(size), align);
+}
+
+CIMGUI_API void  cimgui::ImGui_EndHorizontal(void)
+{
+    ::ImGui::EndHorizontal();
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginVertical(const char* str_id)
+{
+    ::ImGui::BeginVertical(str_id);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginVerticalEx(const char* str_id, cimgui::ImVec2 size, float align)
+{
+    ::ImGui::BeginVertical(str_id, ConvertToCPP_ImVec2(size), align);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginVerticalPtr(const void* ptr_id)
+{
+    ::ImGui::BeginVertical(ptr_id);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginVerticalPtrEx(const void* ptr_id, cimgui::ImVec2 size, float align)
+{
+    ::ImGui::BeginVertical(ptr_id, ConvertToCPP_ImVec2(size), align);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginVerticalInt(int id)
+{
+    ::ImGui::BeginVertical(id);
+}
+
+CIMGUI_API void  cimgui::ImGui_BeginVerticalIntEx(int id, cimgui::ImVec2 size, float align)
+{
+    ::ImGui::BeginVertical(id, ConvertToCPP_ImVec2(size), align);
+}
+
+CIMGUI_API void  cimgui::ImGui_EndVertical(void)
+{
+    ::ImGui::EndVertical();
+}
+
+CIMGUI_API void  cimgui::ImGui_Spring(void)
+{
+    ::ImGui::Spring();
+}
+
+CIMGUI_API void  cimgui::ImGui_SpringEx(float weight, float spacing)
+{
+    ::ImGui::Spring(weight, spacing);
+}
+
+CIMGUI_API void  cimgui::ImGui_SuspendLayout(void)
+{
+    ::ImGui::SuspendLayout();
+}
+
+CIMGUI_API void  cimgui::ImGui_ResumeLayout(void)
+{
+    ::ImGui::ResumeLayout();
+}
+
 CIMGUI_API void    cimgui::ImGui_PushID(const char* str_id)
 {
     ::ImGui::PushID(str_id);
