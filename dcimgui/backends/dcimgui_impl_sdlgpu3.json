@@ -117,6 +117,94 @@
                 "filename": "imgui_impl_sdlgpu3.h",
                 "line": 1
             }
+        },
+        {
+            "name": "ImGui_ImplSDLGPU3_RenderState",
+            "original_fully_qualified_name": "ImGui_ImplSDLGPU3_RenderState",
+            "kind": "struct",
+            "by_value": false,
+            "forward_declaration": false,
+            "is_anonymous": false,
+            "fields": [
+                {
+                    "name": "Device",
+                    "is_array": false,
+                    "is_anonymous": false,
+                    "type": {
+                        "declaration": "SDL_GPUDevice*",
+                        "description": {
+                            "kind": "Pointer",
+                            "inner_type": {
+                                "kind": "User",
+                                "name": "SDL_GPUDevice"
+                            }
+                        }
+                    },
+                    "is_internal": false,
+                    "source_location": {
+                        "filename": "imgui_impl_sdlgpu3.h",
+                        "line": 58
+                    }
+                },
+                {
+                    "name": "SamplerDefault",
+                    "is_array": false,
+                    "is_anonymous": false,
+                    "type": {
+                        "declaration": "SDL_GPUSampler*",
+                        "description": {
+                            "kind": "Pointer",
+                            "inner_type": {
+                                "kind": "User",
+                                "name": "SDL_GPUSampler"
+                            }
+                        }
+                    },
+                    "comments": {
+                        "attached": "// Default sampler (bilinear filtering)"
+                    },
+                    "is_internal": false,
+                    "source_location": {
+                        "filename": "imgui_impl_sdlgpu3.h",
+                        "line": 59
+                    }
+                },
+                {
+                    "name": "SamplerCurrent",
+                    "is_array": false,
+                    "is_anonymous": false,
+                    "type": {
+                        "declaration": "SDL_GPUSampler*",
+                        "description": {
+                            "kind": "Pointer",
+                            "inner_type": {
+                                "kind": "User",
+                                "name": "SDL_GPUSampler"
+                            }
+                        }
+                    },
+                    "comments": {
+                        "attached": "// Current sampler (may be changed by callback)"
+                    },
+                    "is_internal": false,
+                    "source_location": {
+                        "filename": "imgui_impl_sdlgpu3.h",
+                        "line": 60
+                    }
+                }
+            ],
+            "comments": {
+                "preceding": [
+                    "// [BETA] Selected render state data shared with callbacks.",
+                    "// This is temporarily stored in GetPlatformIO().Renderer_RenderState during the ImGui_ImplSDLGPU3_RenderDrawData() call.",
+                    "// (Please open an issue if you feel you need access to more data)"
+                ]
+            },
+            "is_internal": false,
+            "source_location": {
+                "filename": "imgui_impl_sdlgpu3.h",
+                "line": 56
+            }
         }
     ],
     "functions": [

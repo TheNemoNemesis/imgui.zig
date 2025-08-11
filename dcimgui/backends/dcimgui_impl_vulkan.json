@@ -763,7 +763,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_vulkan.h",
-                        "line": 2251
+                        "line": 2262
                     }
                 },
                 {
@@ -780,7 +780,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_vulkan.h",
-                        "line": 2252
+                        "line": 2263
                     }
                 },
                 {
@@ -800,7 +800,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_vulkan.h",
-                        "line": 2253
+                        "line": 2264
                     }
                 }
             ],
@@ -810,7 +810,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_vulkan.h",
-                "line": 2249
+                "line": 2260
             }
         },
         {
@@ -884,7 +884,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_vulkan.h",
-                        "line": 2251
+                        "line": 2262
                     }
                 },
                 {
@@ -901,7 +901,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_vulkan.h",
-                        "line": 2252
+                        "line": 2263
                     }
                 },
                 {
@@ -921,7 +921,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_vulkan.h",
-                        "line": 2253
+                        "line": 2264
                     }
                 }
             ],
@@ -931,7 +931,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_vulkan.h",
-                "line": 2249
+                "line": 2260
             }
         },
         {
