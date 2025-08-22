@@ -91,11 +91,53 @@
                         "filename": "imgui_impl_sdlgpu3.h",
                         "line": 35
                     }
+                },
+                {
+                    "name": "SwapchainComposition",
+                    "is_array": false,
+                    "is_anonymous": false,
+                    "type": {
+                        "declaration": "SDL_GPUSwapchainComposition",
+                        "description": {
+                            "kind": "User",
+                            "name": "SDL_GPUSwapchainComposition"
+                        }
+                    },
+                    "default_value": "SDL_GPU_SWAPCHAINCOMPOSITION_SDR",
+                    "comments": {
+                        "attached": "// Only used in multi-viewports mode."
+                    },
+                    "is_internal": false,
+                    "source_location": {
+                        "filename": "imgui_impl_sdlgpu3.h",
+                        "line": 36
+                    }
+                },
+                {
+                    "name": "PresentMode",
+                    "is_array": false,
+                    "is_anonymous": false,
+                    "type": {
+                        "declaration": "SDL_GPUPresentMode",
+                        "description": {
+                            "kind": "User",
+                            "name": "SDL_GPUPresentMode"
+                        }
+                    },
+                    "default_value": "SDL_GPU_PRESENTMODE_VSYNC",
+                    "comments": {
+                        "attached": "// Only used in multi-viewports mode."
+                    },
+                    "is_internal": false,
+                    "source_location": {
+                        "filename": "imgui_impl_sdlgpu3.h",
+                        "line": 37
+                    }
                 }
             ],
             "comments": {
                 "preceding": [
-                    "// - Remember to set ColorTargetFormat to the correct format. If you're rendering to the swapchain, call SDL_GetGPUSwapchainTextureFormat to query the right value"
+                    "// - Remember to set ColorTargetFormat to the correct format. If you're rendering to the swapchain, call SDL_GetGPUSwapchainTextureFormat() to query the right value"
                 ]
             },
             "is_internal": false,
@@ -143,7 +185,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_sdlgpu3.h",
-                        "line": 57
+                        "line": 59
                     }
                 },
                 {
@@ -166,7 +208,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_sdlgpu3.h",
-                        "line": 58
+                        "line": 60
                     }
                 },
                 {
@@ -189,7 +231,7 @@
                     "is_internal": false,
                     "source_location": {
                         "filename": "imgui_impl_sdlgpu3.h",
-                        "line": 59
+                        "line": 61
                     }
                 }
             ],
@@ -203,7 +245,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 55
+                "line": 57
             }
         }
     ],
@@ -250,7 +292,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 39
+                "line": 41
             }
         },
         {
@@ -273,7 +315,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 40
+                "line": 42
             }
         },
         {
@@ -296,7 +338,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 41
+                "line": 43
             }
         },
         {
@@ -352,7 +394,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 42
+                "line": 44
             }
         },
         {
@@ -427,7 +469,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 43
+                "line": 45
             }
         },
         {
@@ -516,7 +558,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 43
+                "line": 45
             }
         },
         {
@@ -544,7 +586,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 46
+                "line": 48
             }
         },
         {
@@ -567,7 +609,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 47
+                "line": 49
             }
         },
         {
@@ -612,7 +654,7 @@
             "is_internal": false,
             "source_location": {
                 "filename": "imgui_impl_sdlgpu3.h",
-                "line": 50
+                "line": 52
             }
         }
     ]
