@@ -2,7 +2,7 @@
 // **DO NOT EDIT DIRECTLY**
 // https://github.com/dearimgui/dear_bindings
 
-// dear imgui, v1.92.2
+// dear imgui, v1.92.3 WIP
 struct ImVector_ImFontBakedPtr_t { int Size; int Capacity; ImFontBaked** Data; };  // Instantiation of ImVector<ImFontBaked*>
 struct ImVector_ImFontAtlasPtr_t { int Size; int Capacity; ImFontAtlas** Data; };  // Instantiation of ImVector<ImFontAtlas*>
 struct ImVector_ImGuiLayoutPtr_t { int Size; int Capacity; ImGuiLayout** Data; };  // Instantiation of ImVector<ImGuiLayout*>
@@ -436,6 +436,8 @@ typedef ImU16 ImGuiTableDrawChannelIdx;
 #define IM_PRIu64   "llu"
 #define IM_PRIX64   "llX"
 #endif // #if defined(_MSC_VER)&&!defined(__clang__)
+#define IM_TEXTUREID_TO_U64(_TEXID) ((ImU64)(intptr_t)(_TEXID))
+
 //-----------------------------------------------------------------------------
 // [SECTION] Generic helpers
 // Note that the ImXXX helpers functions are lower-level than ImGui functions.
@@ -1414,6 +1416,15 @@ struct ImGuiPtrOrIndex_t
     int   Index;  // Usually index in a main pool.
 };
 
+// Data used by IsItemDeactivated()/IsItemDeactivatedAfterEdit() functions
+struct ImGuiDeactivatedItemData_t
+{
+    ImGuiID ID;
+    int     ElapseFrame;
+    bool    HasBeenEditedBefore;
+    bool    IsAlive;
+};
+
 // sizeof() == 48
 struct ImGuiLayoutItem_t
 {
@@ -1454,15 +1465,6 @@ struct ImGuiLayout_t
     ImVec2                   StartCursorMaxPos;  // Maximum cursor position when BeginLayout is called.
 
     ImDrawListSplitter       Splitter;
-};
-
-// Data used by IsItemDeactivated()/IsItemDeactivatedAfterEdit() functions
-struct ImGuiDeactivatedItemData_t
-{
-    ImGuiID ID;
-    int     ElapseFrame;
-    bool    HasBeenEditedBefore;
-    bool    IsAlive;
 };
 
 //-----------------------------------------------------------------------------
@@ -2435,6 +2437,7 @@ struct ImGuiContext_t
     bool                           ActiveIdHasBeenEditedBefore;         // Was the value associated to the widget Edited over the course of the Active state.
     bool                           ActiveIdHasBeenEditedThisFrame;
     bool                           ActiveIdFromShortcut;
+    ImGuiID                        ActiveIdDisabledId;                  // When clicking a disabled item we set ActiveId=window->MoveId to avoid interference with widget code. Actual item ID is stored here.
     int                            ActiveIdMouseButton : 8;
     ImVec2                         ActiveIdClickOffset;                 // Clicked offset from upper-left corner, if applicable (currently only set by ButtonBehavior)
     ImGuiWindow*                   ActiveIdWindow;

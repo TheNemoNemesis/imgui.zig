@@ -1,4 +1,4 @@
-// dear imgui, v1.92.2
+// dear imgui, v1.92.3 WIP
 // (internal structures/api)
 
 // You may use this file to debug, understand or extend Dear ImGui features but we don't provide any guarantee of forward compatibility.
@@ -347,6 +347,7 @@ extern IMGUI_API ImGuiContext* GImGui;  // Current implicit context pointer
 #define IM_PRIu64   "llu"
 #define IM_PRIX64   "llX"
 #endif
+#define IM_TEXTUREID_TO_U64(_TEXID) ((ImU64)(intptr_t)(_TEXID))
 
 //-----------------------------------------------------------------------------
 // [SECTION] Generic helpers
@@ -1437,6 +1438,15 @@ struct ImGuiPtrOrIndex
     ImGuiPtrOrIndex(int index)  { Ptr = NULL; Index = index; }
 };
 
+// Data used by IsItemDeactivated()/IsItemDeactivatedAfterEdit() functions
+struct ImGuiDeactivatedItemData
+{
+    ImGuiID     ID;
+    int         ElapseFrame;
+    bool        HasBeenEditedBefore;
+    bool        IsAlive;
+};
+
 // sizeof() == 48
 struct ImGuiLayoutItem
 {
@@ -1503,15 +1513,6 @@ struct ImGuiLayout
         StartPos = ImVec2(0, 0);
         StartCursorMaxPos = ImVec2(0, 0);
     }
-};
-
-// Data used by IsItemDeactivated()/IsItemDeactivatedAfterEdit() functions
-struct ImGuiDeactivatedItemData
-{
-    ImGuiID     ID;
-    int         ElapseFrame;
-    bool        HasBeenEditedBefore;
-    bool        IsAlive;
 };
 
 //-----------------------------------------------------------------------------
@@ -1582,7 +1583,7 @@ enum ImGuiInputEventType
     ImGuiInputEventType_COUNT
 };
 
-enum ImGuiInputSource
+enum ImGuiInputSource : int
 {
     ImGuiInputSource_None = 0,
     ImGuiInputSource_Mouse,         // Note: may be Mouse or TouchScreen or Pen. See io.MouseSource to distinguish them.
@@ -2483,6 +2484,7 @@ struct ImGuiContext
     bool                    ActiveIdHasBeenEditedBefore;        // Was the value associated to the widget Edited over the course of the Active state.
     bool                    ActiveIdHasBeenEditedThisFrame;
     bool                    ActiveIdFromShortcut;
+    ImGuiID                 ActiveIdDisabledId;                 // When clicking a disabled item we set ActiveId=window->MoveId to avoid interference with widget code. Actual item ID is stored here.
     int                     ActiveIdMouseButton : 8;
     ImVec2                  ActiveIdClickOffset;                // Clicked offset from upper-left corner, if applicable (currently only set by ButtonBehavior)
     ImGuiWindow*            ActiveIdWindow;

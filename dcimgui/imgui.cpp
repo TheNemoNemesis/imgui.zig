@@ -1,4 +1,4 @@
-// dear imgui, v1.92.2
+// dear imgui, v1.92.3 WIP
 // (main code and documentation)
 
 // Help:
@@ -1465,6 +1465,7 @@ ImGuiStyle::ImGuiStyle()
     ColumnsMinSpacing           = 6.0f;             // Minimum horizontal spacing between two columns. Preferably > (FramePadding.x + 1).
     ScrollbarSize               = 14.0f;            // Width of the vertical scrollbar, Height of the horizontal scrollbar
     ScrollbarRounding           = 9.0f;             // Radius of grab corners rounding for scrollbar
+    ScrollbarPadding            = 2.0f;             // Padding of scrollbar grab within its frame (same for both axises)
     GrabMinSize                 = 12.0f;            // Minimum width/height of a grab box for slider/scrollbar
     GrabRounding                = 0.0f;             // Radius of grabs corners rounding. Set to 0.0f to have rectangular slider grabs.
     LayoutAlign                 = 0.5f;             // Element alignment inside horizontal and vertical layouts (0.0f - left/top, 1.0f - right/bottom, 0.5f - center).
@@ -1536,6 +1537,7 @@ void ImGuiStyle::ScaleAllSizes(float scale_factor)
     ColumnsMinSpacing = ImTrunc(ColumnsMinSpacing * scale_factor);
     ScrollbarSize = ImTrunc(ScrollbarSize * scale_factor);
     ScrollbarRounding = ImTrunc(ScrollbarRounding * scale_factor);
+    ScrollbarPadding = ImTrunc(ScrollbarPadding * scale_factor);
     GrabMinSize = ImTrunc(GrabMinSize * scale_factor);
     GrabRounding = ImTrunc(GrabRounding * scale_factor);
     LogSliderDeadzone = ImTrunc(LogSliderDeadzone * scale_factor);
@@ -3597,6 +3599,7 @@ static const ImGuiStyleVarInfo GStyleVarsInfo[] =
     { 2, ImGuiDataType_Float, (ImU32)offsetof(ImGuiStyle, CellPadding) },               // ImGuiStyleVar_CellPadding
     { 1, ImGuiDataType_Float, (ImU32)offsetof(ImGuiStyle, ScrollbarSize) },             // ImGuiStyleVar_ScrollbarSize
     { 1, ImGuiDataType_Float, (ImU32)offsetof(ImGuiStyle, ScrollbarRounding) },         // ImGuiStyleVar_ScrollbarRounding
+    { 1, ImGuiDataType_Float, (ImU32)offsetof(ImGuiStyle, ScrollbarPadding) },          // ImGuiStyleVar_ScrollbarPadding
     { 1, ImGuiDataType_Float, (ImU32)offsetof(ImGuiStyle, GrabMinSize) },               // ImGuiStyleVar_GrabMinSize
     { 1, ImGuiDataType_Float, (ImU32)offsetof(ImGuiStyle, GrabRounding) },              // ImGuiStyleVar_GrabRounding
     { 1, ImGuiDataType_Float, (ImU32)offsetof(ImGuiStyle, LayoutAlign) },               // ImGuiStyleVar_LayoutAlign
@@ -4166,6 +4169,7 @@ ImGuiContext::ImGuiContext(ImFontAtlas* shared_font_atlas)
     ActiveIdClickOffset = ImVec2(-1, -1);
     ActiveIdWindow = NULL;
     ActiveIdSource = ImGuiInputSource_None;
+    ActiveIdDisabledId = 0;
     ActiveIdMouseButton = -1;
     ActiveIdPreviousFrame = 0;
     memset(&DeactivatedItemData, 0, sizeof(DeactivatedItemData));
@@ -4692,6 +4696,7 @@ void ImGui::SetActiveID(ImGuiID id, ImGuiWindow* window)
     g.ActiveIdWindow = window;
     g.ActiveIdHasBeenEditedThisFrame = false;
     g.ActiveIdFromShortcut = false;
+    g.ActiveIdDisabledId = 0;
     if (id)
     {
         g.ActiveIdIsAlive = id;
@@ -4799,6 +4804,7 @@ static ImGuiHoveredFlags ApplyHoverFlagsForTooltip(ImGuiHoveredFlags user_flags,
 }
 
 // This is roughly matching the behavior of internal-facing ItemHoverable()
+// - we allow hovering to be true when ActiveId==window->MoveID, so that clicking on non-interactive items such as a Text() item still returns true with IsItemHovered()
 // - this should work even for non-interactive items that have no ID, so we cannot use LastItemId
 bool ImGui::IsItemHovered(ImGuiHoveredFlags flags)
 {
@@ -4840,7 +4846,20 @@ bool ImGui::IsItemHovered(ImGuiHoveredFlags flags)
         const ImGuiID id = g.LastItemData.ID;
         if ((flags & ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) == 0)
             if (g.ActiveId != 0 && g.ActiveId != id && !g.ActiveIdAllowOverlap)
-                return false;
+            {
+                // When ActiveId == MoveId it means that either:
+                // - (1) user clicked on void _or_ an item with no id, which triggers moving window (ActiveId is set even when window has _NoMove flag)
+                //   - the (id == 0) test handles it, however, IsItemHovered() will leak between id==0 items (mostly visible when using _NoMove). // FIXME: May be fixed.
+                // - (2) user clicked a disabled item. UpdateMouseMovingWindowEndFrame() uses ActiveId == MoveId to avoid interference with item logic + sets ActiveIdDisabledId.
+                bool cancel_is_hovered = true;
+                if (g.ActiveId == window->MoveId && (id == 0 || g.ActiveIdDisabledId == id))
+                    cancel_is_hovered = false;
+                // When ActiveId == TabId it means user clicked docking tab for the window.
+                if (g.ActiveId == window->TabId)
+                    cancel_is_hovered = false;
+                if (cancel_is_hovered)
+                    return false;
+            }
 
         // Test if interactions on this window are blocked by an active popup or modal.
         // The ImGuiHoveredFlags_AllowWhenBlockedByPopup flag will be tested here.
@@ -4921,7 +4940,7 @@ bool ImGui::ItemHoverable(const ImRect& bb, ImGuiID id, ImGuiItemFlags item_flag
         if (!g.ActiveIdFromShortcut)
             return false;
 
-    // Done with rectangle culling so we can perform heavier checks now.
+    // We are done with rectangle culling so we can perform heavier checks now.
     if (!(item_flags & ImGuiItemFlags_NoWindowHoverableCheck) && !IsWindowContentHoverable(window, ImGuiHoveredFlags_None))
     {
         g.HoveredIdIsDisabled = true;
@@ -5362,9 +5381,12 @@ void ImGui::UpdateMouseMovingWindowEndFrame()
                         g.MovingWindow = NULL;
 
             // Cancel moving if clicked over an item which was disabled or inhibited by popups
-            // (when g.HoveredIdIsDisabled == true && g.HoveredId == 0 we are inhibited by popups, when g.HoveredIdIsDisabled == true && g.HoveredId != 0 we are over a disabled item)0 already)
+            // (when g.HoveredIdIsDisabled == true && g.HoveredId == 0 we are inhibited by popups, when g.HoveredIdIsDisabled == true && g.HoveredId != 0 we are over a disabled item)
             if (g.HoveredIdIsDisabled)
+            {
                 g.MovingWindow = NULL;
+                g.ActiveIdDisabledId = g.HoveredId;
+            }
         }
         else if (root_window == NULL && g.NavWindow != NULL)
         {
@@ -8384,12 +8406,14 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
             NavInitWindow(window, false); // <-- this is in the way for us to be able to defer and sort reappearing FocusWindow() calls
 
         // Close requested by platform window (apply to all windows in this viewport)
+        // FIXME: Investigate removing the 'window->Viewport != GetMainViewport()' test, which seems superfluous.
         if (p_open != NULL && window->Viewport->PlatformRequestClose && window->Viewport != GetMainViewport())
-        {
-            IMGUI_DEBUG_LOG_VIEWPORT("[viewport] Window '%s' closed by PlatformRequestClose\n", window->Name);
-            *p_open = false;
-            g.NavWindowingToggleLayer = false; // Assume user mapped PlatformRequestClose on ALT-F4 so we disable ALT for menu toggle. False positive not an issue. // FIXME-NAV: Try removing.
-        }
+            if (window->DockNode == NULL || (window->DockNode->MergedFlags & ImGuiDockNodeFlags_DockSpace) == 0)
+            {
+                IMGUI_DEBUG_LOG_VIEWPORT("[viewport] Window '%s' closed by PlatformRequestClose\n", window->Name);
+                *p_open = false;
+                g.NavWindowingToggleLayer = false; // Assume user mapped PlatformRequestClose on ALT-F4 so we disable ALT for menu toggle. False positive not an issue. // FIXME-NAV: Try removing.
+            }
 
         // Pressing CTRL+C copy window content into the clipboard
         // [EXPERIMENTAL] Breaks on nested Begin/End pairs. We need to work that out and add better logging scope.
@@ -11712,6 +11736,9 @@ bool ImGui::ItemAdd(const ImRect& bb, ImGuiID id, const ImRect* nav_bb_arg, ImGu
     g.LastItemData.StatusFlags = ImGuiItemStatusFlags_None;
     // Note: we don't copy 'g.NextItemData.SelectionUserData' to an hypothetical g.LastItemData.SelectionUserData: since the former is not cleared.
 
+    if (window->DC.CurrentLayoutItem)
+        window->DC.CurrentLayoutItem->MeasuredBounds.Max = ImMax(window->DC.CurrentLayoutItem->MeasuredBounds.Max, bb.Max);
+
     if (id != 0)
     {
         KeepAliveID(id);
@@ -11743,9 +11770,6 @@ bool ImGui::ItemAdd(const ImRect& bb, ImGuiID id, const ImRect* nav_bb_arg, ImGu
     // Lightweight clear of SetNextItemXXX data.
     g.NextItemData.HasFlags = ImGuiNextItemDataFlags_None;
     g.NextItemData.ItemFlags = ImGuiItemFlags_None;
-
-    if (window->DC.CurrentLayoutItem)
-        window->DC.CurrentLayoutItem->MeasuredBounds.Max = ImMax(window->DC.CurrentLayoutItem->MeasuredBounds.Max, bb.Max);
 
 #ifdef IMGUI_ENABLE_TEST_ENGINE
     if (id != 0)
@@ -11876,6 +11900,7 @@ void ImGui::ItemSize(const ImVec2& size, float text_baseline_y)
         return;
     }
 
+
     // We increase the height in this function to accommodate for baseline offset.
     // In theory we should be offsetting the starting position (window->DC.CursorPos), that will be the topic of a larger refactor,
     // but since ItemSize() is not yet an API that moves the cursor (to handle e.g. wrapping) enlarging the height has the same effect.
@@ -11901,7 +11926,7 @@ void ImGui::ItemSize(const ImVec2& size, float text_baseline_y)
     window->DC.CurrLineTextBaseOffset = 0.0f;
     window->DC.IsSameLine = window->DC.IsSetPos = false;
 
-    // // Horizontal layout mode
+    // Horizontal layout mode
     // if (window->DC.LayoutType == ImGuiLayoutType_Horizontal)
     //     SameLine();
 }
@@ -12262,7 +12287,6 @@ void ImGui::EndGroup()
     if (g.DebugShowGroupRects)
         window->DrawList->AddRect(group_bb.Min, group_bb.Max, IM_COL32(255,0,255,255));   // [Debug]
 }
-
 
 //-----------------------------------------------------------------------------
 // [SECTION] STACK LAYOUT
@@ -13030,7 +13054,6 @@ void ImGui::ResumeLayout()
     IM_UNUSED(window);
     PopLayout(NULL);
 }
-
 
 //-----------------------------------------------------------------------------
 // [SECTION] SCROLLING
@@ -22425,12 +22448,12 @@ static const char* FormatTextureIDForDebugDisplay(char* buf, int buf_size, ImTex
     return buf;
 }
 
-static const char* FormatTextureIDForDebugDisplay(char* buf, int buf_size, const ImDrawCmd* cmd)
+static const char* FormatTextureRefForDebugDisplay(char* buf, int buf_size, ImTextureRef tex_ref)
 {
     char* buf_end = buf + buf_size;
-    if (cmd->TexRef._TexData != NULL)
-        buf += ImFormatString(buf, buf_end - buf, "#%03d: ", cmd->TexRef._TexData->UniqueID);
-    return FormatTextureIDForDebugDisplay(buf, (int)(buf_end - buf), cmd->TexRef.GetTexID()); // Calling TexRef::GetTexID() to avoid assert of cmd->GetTexID()
+    if (tex_ref._TexData != NULL)
+        buf += ImFormatString(buf, buf_end - buf, "#%03d: ", tex_ref._TexData->UniqueID);
+    return FormatTextureIDForDebugDisplay(buf, (int)(buf_end - buf), tex_ref.GetTexID()); // Calling TexRef::GetTexID() to avoid assert of cmd->GetTexID()
 }
 
 #ifdef IMGUI_ENABLE_FREETYPE
@@ -22618,7 +22641,7 @@ void ImGui::DebugNodeTexture(ImTextureData* tex, int int_id, const ImFontAtlasRe
 
         char texid_desc[30];
         Text("Status = %s (%d), Format = %s (%d), UseColors = %d", ImTextureDataGetStatusName(tex->Status), tex->Status, ImTextureDataGetFormatName(tex->Format), tex->Format, tex->UseColors);
-        Text("TexID = %s, BackendUserData = %p", FormatTextureIDForDebugDisplay(texid_desc, IM_ARRAYSIZE(texid_desc), tex->TexID), tex->BackendUserData);
+        Text("TexID = %s, BackendUserData = %p", FormatTextureRefForDebugDisplay(texid_desc, IM_ARRAYSIZE(texid_desc), tex->GetTexRef()), tex->BackendUserData);
         TreePop();
     }
     PopID();
@@ -23499,7 +23522,7 @@ void ImGui::DebugNodeDrawList(ImGuiWindow* window, ImGuiViewportP* viewport, con
         }
 
         char texid_desc[30];
-        FormatTextureIDForDebugDisplay(texid_desc, IM_ARRAYSIZE(texid_desc), pcmd);
+        FormatTextureRefForDebugDisplay(texid_desc, IM_ARRAYSIZE(texid_desc), pcmd->TexRef);
         char buf[300];
         ImFormatString(buf, IM_ARRAYSIZE(buf), "DrawCmd:%5d tris, Tex %s, ClipRect (%4.0f,%4.0f)-(%4.0f,%4.0f)",
             pcmd->ElemCount / 3, texid_desc, pcmd->ClipRect.x, pcmd->ClipRect.y, pcmd->ClipRect.z, pcmd->ClipRect.w);
